@@ -172,22 +172,29 @@ func twoDSliceUsage() {
 	twoDSlice := make([][]int, 2)
 
 	// you have to specify inner dimension
-	for i := range twoDSlice {
+	for i := range twoDSlice { // if use one variable to receive range, you are only using the INDEX!
 		twoDSlice[i] = make([]int, 3)
 	}
 
-	// or: using slice literals 
+	// or: using slice literals
 	// NOTE: inner slices can have different dimensions
 	twoDSlice[0] = []int{1, 2, 3}
 	twoDSlice[1] = []int{4, 6, 7, 9}
 	fmt.Println(twoDSlice)
-	fmt.Printf("row: %d, col-0: %d, col-1: %d\n", 
-	len(twoDSlice), len(twoDSlice[0]), len(twoDSlice[1]))
+	fmt.Printf("row: %d, col-0: %d, col-1: %d\n",
+		len(twoDSlice), len(twoDSlice[0]), len(twoDSlice[1]))
+
+	board := [][]string{
+		{"_", "_", "_"},
+		{"_", "_", "_"},
+		{"_", "_", "_"},
+	}
+	fmt.Println(board)
 }
 
 func tutorialExample() {
 	fmt.Println("\n--------------------\ntutorial example")
-	s := []int {2, 3, 5, 7, 11, 13}
+	s := []int{2, 3, 5, 7, 11, 13}
 	showSliceLenAndCap(s)
 
 	s = s[:0]
