@@ -175,8 +175,23 @@ func main() {
 
 	var e error
 	x := ErrNegativeSqrt(-2)
-	e = x	// OK
-	e = &x	// also OK
+	e = x  // OK
+	e = &x // also OK
 	fmt.Println(e)
 	// this related to the concept of "method set"
 }
+
+/* Further details
+
+Method sets
+
+A type may have a method set associated with it.
+The method set of an interface type is its interface.
+The method set of any other type T consists of all methods declared with receiver type T.
+The method set of the corresponding pointer type *T is the set of all methods that
+declared with receiver *T or T (that is, it also contains the method set of T).
+
+Read:
+https://stackoverflow.com/questions/63995894/why-can-we-assign-a-struct-pointer-to-an-interface-variable-even-though-the-stru
+https://stackoverflow.com/questions/63498619/why-is-an-interface-assignment-more-strict-than-a-method-call
+*/

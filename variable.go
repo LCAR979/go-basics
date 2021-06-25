@@ -122,3 +122,5 @@ func main() {
 
 	useConsts()
 }
+
+// nil is the zero value for pointers, interfaces, maps, slices, channels and function types
