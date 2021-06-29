@@ -1,0 +1,10 @@
+https://research.swtch.com/interfaces  
+    Go Data Structures: Interfaces
+https://www.ardanlabs.com/blog/2013/12/macro-view-of-map-internals-in-go.html 
+    Macro View of Map Internals In Go 
+https://blog.golang.org/slices-intro
+    Go Slices: usage and internals
+http://dmitryvorobev.blogspot.com/2016/08/golang-channels-implementation.html
+    Golang: channels implementation
+https://medium.com/rungo/anatomy-of-channels-in-go-concurrency-in-go-1ec336086adb
+    Anatomy of Channels in Go - Concurrency in Go
