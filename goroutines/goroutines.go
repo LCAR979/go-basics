@@ -50,6 +50,10 @@ func closeAndRangeUsageExample() {
 	for i := range c {
 		fmt.Println(i)
 	}
+
+	// receive both value and the status that if there are still elements in the channel
+	_, more := <-c
+	fmt.Println("Channel has more elements? ", more)
 }
 
 func fibonacciQuitsOnSignal(c, quit chan int) {

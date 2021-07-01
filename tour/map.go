@@ -2,9 +2,9 @@ package main
 
 import "fmt"
 
-/* Introduction 
-- golang map is a reference to a hash table 
-- key must be comparable, int, float64, rune, string, 
+/* Introduction
+- golang map is a reference to a hash table
+- key must be comparable, int, float64, rune, string,
    comparable array and structure, pointer, etc are OK.
    Noncomparable arrays and structs are not OK.
 - you cannot add value to a nil map
@@ -41,10 +41,10 @@ func mapBasic() {
 		fmt.Printf("%s not in m3, elem = %v\n", name_del, elem)
 	}
 
-	/* *****NOTE***** 
+	/* *****NOTE*****
 	if you insert into a nil map, a runtime error will be thrown
-	var m map[string]int 
-	m["a"] = 1 // This is not correct 
+	var m map[string]int
+	m["a"] = 1 // This is not correct
 	*/
 }
 
@@ -54,7 +54,33 @@ func iterateMap(m map[string]vertex) {
 	}
 }
 
+func checkKeyExists() {
+	m := map[string]float64{"pi": 3.14}
+
+	// method 1: check second return value
+	v, found := m["pi"] // v == 3.14  found == true
+	v, found = m["pie"] // v == 0.0   found == false
+	_, found = m["pi"]  // found == true
+	fmt.Println(v, found)
+
+	// method 2: use second return value directly in an if statement
+	if v, found := m["pi"]; found {
+		fmt.Println(v)
+	}
+	fmt.Println(v, found)
+
+	// method 3: check for zero value  SHOULDN'T USE THIS
+	v = m["pi"]  // v == 3.14
+	v = m["pie"] // v == 0.0 (zero value)
+	// Warning: This approach doesn't work if the zero value is a possible key.
+	// example
+	// m := map[int]int,  v := m[0]
+	// if return 0, you can't say it's a value 0 for key 0 (key 0 exists)
+	// or default zero value for key 0 (key 0 doesn't exist)
+}
+
 func main() {
 	mapBasic()
 	iterateMap(m)
+	checkKeyExists()
 }
