@@ -1,5 +1,7 @@
 package context
 
+import "net/http"
+
 type context struct {
 	Req    *http.Request
 	Writer http.ResponseWriter
@@ -19,4 +21,14 @@ func newContext(req *http.Request, w http.ResponseWriter) *context {
 	}
 }
 
+func (c *context) PostFormValue(key string) {
 
+}
+
+func (c *context) Query(key string) {
+
+}
+
+func (c *context) Status(code int) {
+
+}
