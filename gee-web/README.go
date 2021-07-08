@@ -279,7 +279,7 @@ type Request struct {
 	// contains filtered or unexported fields
 }
 
-/*
+
 type Header
     func (h Header) Add(key, value string)
     func (h Header) Clone() Header
@@ -289,4 +289,33 @@ type Header
     func (h Header) Values(key string) []string
     func (h Header) Write(w io.Writer) error
     func (h Header) WriteSubset(w io.Writer, exclude map[string]bool) error
+
+
+// net.url
+type URL
+    func Parse(rawurl string) (*URL, error)
+    func ParseRequestURI(rawurl string) (*URL, error)
+    func (u *URL) EscapedFragment() string
+    func (u *URL) EscapedPath() string
+    func (u *URL) Hostname() string
+    func (u *URL) IsAbs() bool
+    func (u *URL) MarshalBinary() (text []byte, err error)
+    func (u *URL) Parse(ref string) (*URL, error)
+    func (u *URL) Port() string
+    func (u *URL) Query() Values
+    func (u *URL) Redacted() string
+    func (u *URL) RequestURI() string
+    func (u *URL) ResolveReference(ref *URL) *URL
+    func (u *URL) String() string
+	func (u *URL) UnmarshalBinary(text []byte) errortype 
+type Values
+    func ParseQuery(query string) (Values, error)
+    func (v Values) Add(key, value string)
+    func (v Values) Del(key string)
+    func (v Values) Encode() string
+    func (v Values) Get(key string) string
+	func (v Values) Set(key, value string)
+	
+/* A good article talking about many confusing points in go web 
+https://www.cnblogs.com/f-ck-need-u/p/10035801.html
 */

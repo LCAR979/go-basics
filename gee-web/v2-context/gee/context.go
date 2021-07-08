@@ -21,14 +21,19 @@ func newContext(req *http.Request, w http.ResponseWriter) *context {
 	}
 }
 
-func (c *context) PostFormValue(key string) {
-
+//`Value` means retrieving the first value
+// another version: PostFormValue(), which excludes the url query part
+func (c *context) FormValue(key string) {
+	return c.Req.FormValue(key)
 }
 
-func (c *context) Query(key string) {
-
+// url.Query() -> Values(type like map[string][]string)
+// Values.Get() returns first value in string format
+func (c *context) Query(key string) string {
+	return c.Req.url.Query().Get(key)
 }
 
 func (c *context) Status(code int) {
-
+	c.StatusCode = code
+	c.Writer.WriteHeader(code)
 }
