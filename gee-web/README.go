@@ -280,7 +280,7 @@ type Request struct {
 }
 
 
-type Header
+type Header map[string][]string
     func (h Header) Add(key, value string)
     func (h Header) Clone() Header
     func (h Header) Del(key string)
