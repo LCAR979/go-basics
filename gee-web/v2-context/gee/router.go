@@ -1,33 +1,31 @@
 package gee
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 )
 
-type HandleFunc func(w http.ResponseWriter, r *http.Request)
-
-type Router struct {
+type router struct {
 	table map[string]HandleFunc
 }
 
-func New() *Router {
-	return &Router{table: make(map[string]HandleFunc)}
+func newRouter() *router {
+	return &router{table: make(map[string]HandleFunc)}
 }
 
-func (e *Router) handle(c *Context) {
-	method := r.Method
-	path := r.URL.Path
-	fullKey := method + "#" + path
-	if handleFunc, ok := e.table[fullKey]; ok {
-		handleFunc(w, r)
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "ERROR: 404 Not Found")
-	}
-}
-
-func (r *Router) addRoute(method string, path string, handle HandleFunc) {
+func (r *router) addRoute(method string, path string, handle HandleFunc) {
+	log.Printf("Route %4s - %s\n", method, path)
 	fullKey := method + "#" + path
 	r.table[fullKey] = handle
+}
+
+func (r *router) handle(c *Context) {
+	method := c.Method
+	path := c.Path
+	fullKey := method + "#" + path
+	if handleFunc, ok := r.table[fullKey]; ok {
+		handleFunc(c)
+	} else {
+		c.String(http.StatusNotFound, "404 NOT FOUND")
+	}
 }
