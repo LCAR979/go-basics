@@ -15,6 +15,9 @@ type Context struct {
 	Method string
 	Path   string
 
+	// save route params
+	Params map[string]string
+
 	StatusCode int
 }
 
@@ -70,4 +73,9 @@ func (c *Context) JSON(code int, obj interface{}) {
 	if err := encoder.Encode(obj); err != nil {
 		http.Error(c.Writer, err.Error(), 500)
 	}
+}
+
+func (c *Context) Param(key string) string {
+	val, _ := c.Params[key]
+	return val
 }
