@@ -30,6 +30,6 @@ func (n *node) insert(totalPattern string, parts []string, height int) {
 
 }
 
-func (n *node) search(parts string, height int) {
+func (n *node) search(parts []string, height int) *node {
 
 }
