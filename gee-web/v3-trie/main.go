@@ -6,6 +6,7 @@ import (
 	"gee"
 )
 
+// developer usage
 func main() {
 	r := gee.NewEngine()
 	r.GET("/", func(c *gee.Context) {

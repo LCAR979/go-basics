@@ -6,9 +6,13 @@ import (
 
 type node struct {
 	totalPattern string
-	crtPattern   string // current node matching what
-	children     []*node
-	isExact      bool // if the current node is exact match
+	// a whole pattern, like "foo/bar/:name/p/*", only valid for leaf nodes, otherwise empty
+	crtPattern string
+	// current node matching what pattern, can be "foo" or ":bar" or "*"
+	children []*node
+	// children of current node
+	isExact bool
+	// if the current node is exact match
 }
 
 func (n *node) firstMatchInChildren(target string) *node {
