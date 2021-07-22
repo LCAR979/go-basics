@@ -22,7 +22,7 @@ func main() {
 
 	r.GET("/assets/*filepath", func(c *gee.Context) {
 		// expect /assets/css/index.css
-		c.Json(http.StatusOK, gee.jsonObj{"filepath": c.Param("filepath")})
+		c.JSON(http.StatusOK, gee.JSONObj{"filepath": c.Param("filepath")})
 	})
 
 	r.POST("/login", func(c *gee.Context) {
