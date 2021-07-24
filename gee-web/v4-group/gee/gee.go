@@ -7,6 +7,7 @@ import (
 
 type HandleFunc func(c *Context)
 
+// embedding
 type Engine struct {
 	*RouterGroup
 	router *router
@@ -20,7 +21,10 @@ type RouterGroup struct {
 }
 
 func NewEngine() *Engine {
-	return &Engine{router: newRouter()}
+	engine := &Engine{router: newRouter()}
+	engine.RouterGroup = &RouterGroup{engine: engine}
+	engine.groups = []*RouterGroup{engine.RouterGroup}
+	return engine
 }
 
 func (e *Engine) addRoute(method string, path string, handler HandleFunc) {
