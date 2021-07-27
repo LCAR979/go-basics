@@ -9,6 +9,7 @@ import (
 // developer usage
 func main() {
 	r := gee.NewEngine()
+	r.AddMiddleware(gee.Logger())
 	r.GET("/", func(c *gee.Context) {
 		c.HTML(http.StatusOK, "<h1>Hello Gee</h1>")
 	})
@@ -25,6 +26,7 @@ func main() {
 	}
 
 	v2 := r.NewGroup("/v2")
+	v2.AddMiddleware(gee.LoggerForV2())
 	{
 		v2.GET("/assets/*filepath", func(c *gee.Context) {
 			// expect /assets/css/index.css

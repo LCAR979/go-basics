@@ -88,6 +88,11 @@ func (c *Context) JSON(code int, obj interface{}) {
 }
 
 func (c *Context) Param(key string) string {
-	val, _ := c.Params[key]
+	val := c.Params[key]
 	return val
+}
+
+func (c *Context) Fail(code int, errMsg string) {
+	c.index = len(c.handlers)
+	c.JSON(code, JSONObj{"msg": errMsg})
 }

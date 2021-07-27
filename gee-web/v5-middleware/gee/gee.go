@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type HandlerFunc func(c *Context)
@@ -11,8 +12,8 @@ type HandlerFunc func(c *Context)
 /* the reason of `engine` field here:
 we want to give `routerGroup` the ability to create route policies,
 by adding the `engine` field, we can use routerGroup.engine.router.addRoute to achieve the goal.
-And we also want to keep the ability to directly control a route policy not related to one certain routerGroup,
-so we cannot just move the `router` to the inner of `RouterGroup`
+And we also want to keep the ability to directly control a route policy which is not related to one certain routerGroup,
+so we cannot just move the `router` field to the inner of `RouterGroup`
 */
 type RouterGroup struct {
 	prefix      string
@@ -73,7 +74,17 @@ func (group *RouterGroup) POST(pattern string, handler HandlerFunc) {
 }
 
 func (e *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	var middlewares []HandlerFunc
+
+	reqUrl := req.URL.Path
+	for _, group := range e.groups {
+		if strings.HasPrefix(reqUrl, group.prefix) {
+			middlewares = append(middlewares, group.middlewares...)
+		}
+	}
+
 	c := newContext(req, w)
+	c.handlers = middlewares
 	e.router.handle(c)
 }
 

@@ -45,7 +45,7 @@ func (r *router) addRoute(method string, pattern string, handler HandlerFunc) {
 }
 
 // getRoute() is used when a new visit from client comes,
-// and path is parsed to match patterns saved in trie
+// and `path` is parsed to match patterns saved in trie
 func (r *router) getRoute(method string, path string) (*node, map[string]string) {
 	root, ok := r.roots[method]
 	if !ok {
@@ -78,9 +78,12 @@ func (r *router) handle(c *Context) {
 	if n != nil {
 		// don't forget to save params
 		c.Params = params
-		handleFunc := r.handlers[c.Method+"#"+n.totalPattern]
-		handleFunc(c)
+		key := c.Method + "#" + n.totalPattern
+		c.handlers = append(c.handlers, r.handlers[key])
 	} else {
-		c.String(http.StatusNotFound, "404 NOT FOUND")
+		c.handlers = append(c.handlers, func(c *Context) {
+			c.String(http.StatusNotFound, "404 NOT FOUND %s", c.Path)
+		})
 	}
+	c.Next()
 }
