@@ -20,7 +20,7 @@ func TestParsePattern(t *testing.T) {
 	ok1 := reflect.DeepEqual(parsePattern("/p/:name"), []string{"p", ":name"})
 	ok2 := reflect.DeepEqual(parsePattern("/p/*path"), []string{"p", "*path"})
 	ok3 := reflect.DeepEqual(parsePattern("/p/*path/*"), []string{"p", "*path"})
-	ok4 := reflect.DeepEqual(parsePattern("/p/foo/bar/zip"), []string{"p", "foo", "bar", "zip"})
+	ok4 := reflect.DeepEqual(parsePattern("/p/foo/bar/*zip"), []string{"p", "foo", "bar", "*zip"})
 	fmt.Println(ok1, ok2, ok3, ok4)
 }
 

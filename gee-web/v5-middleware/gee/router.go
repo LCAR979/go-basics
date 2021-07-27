@@ -7,12 +7,12 @@ import (
 
 type router struct {
 	roots    map[string]*node
-	handlers map[string]HandleFunc
+	handlers map[string]HandlerFunc
 }
 
 func newRouter() *router {
 	return &router{roots: make(map[string]*node),
-		handlers: make(map[string]HandleFunc)}
+		handlers: make(map[string]HandlerFunc)}
 }
 
 // parse a path pattern like `/hello/:name`
@@ -32,7 +32,7 @@ func parsePattern(pattern string) []string {
 }
 
 // addRoute() should be called by developers to build the whole router trie
-func (r *router) addRoute(method string, pattern string, handler HandleFunc) {
+func (r *router) addRoute(method string, pattern string, handler HandlerFunc) {
 	if _, ok := r.roots[method]; !ok {
 		r.roots[method] = new(node)
 	}

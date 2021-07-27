@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type HandleFunc func(c *Context)
+type HandlerFunc func(c *Context)
 
 /* the reason of `engine` field here:
 we want to give `routerGroup` the ability to create route policies,
@@ -16,7 +16,7 @@ so we cannot just move the `router` to the inner of `RouterGroup`
 */
 type RouterGroup struct {
 	prefix      string
-	middlewares []HandleFunc
+	middlewares []HandlerFunc
 	engine      *Engine // pointing to the only one global engine istance
 }
 
@@ -54,17 +54,21 @@ func (group *RouterGroup) NewGroup(prefix string) *RouterGroup {
 	return newGroup
 }
 
-func (group *RouterGroup) addRoute(method string, urlPattern string, handler HandleFunc) {
+func (group *RouterGroup) AddMiddleware(middleware ...HandlerFunc) {
+	group.middlewares = append(group.middlewares, middleware...)
+}
+
+func (group *RouterGroup) addRoute(method string, urlPattern string, handler HandlerFunc) {
 	pattern := group.prefix + urlPattern
 	log.Printf("pattern = %s\n", pattern)
 	group.engine.router.addRoute(method, pattern, handler)
 }
 
-func (group *RouterGroup) GET(pattern string, handler HandleFunc) {
+func (group *RouterGroup) GET(pattern string, handler HandlerFunc) {
 	group.addRoute("GET", pattern, handler)
 }
 
-func (group *RouterGroup) POST(pattern string, handler HandleFunc) {
+func (group *RouterGroup) POST(pattern string, handler HandlerFunc) {
 	group.addRoute("POST", pattern, handler)
 }
 
