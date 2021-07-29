@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path"
 	"strings"
 )
 
@@ -57,6 +58,25 @@ func (group *RouterGroup) NewGroup(prefix string) *RouterGroup {
 
 func (group *RouterGroup) AddMiddleware(middleware ...HandlerFunc) {
 	group.middlewares = append(group.middlewares, middleware...)
+}
+
+func (group *RouterGroup) createStaticHandler(relativePath string, fs http.FileSystem) HandlerFunc {
+	absolutePath := path.Join(group.prefix, relativePath)
+	fileServer := http.StripPrefix(absolutePath, http.FileServer(fs))
+	return func(c *Context) {
+		fileName := c.Param("filepath")
+		if _, err := fs.Open(fileName); err != nil {
+			c.Status(http.StatusNotFound)
+			return
+		}
+		fileServer.ServeHTTP(c.Writer, c.Req)
+	}
+}
+
+func (group *RouterGroup) Static(relativePath string, root string) {
+	handler := group.createStaticHandler(relativePath, http.Dir(root))
+	urlPattern := path.Join(relativePath, "/*filepath")
+	group.GET(urlPattern, handler)
 }
 
 func (group *RouterGroup) addRoute(method string, urlPattern string, handler HandlerFunc) {
