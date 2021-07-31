@@ -2,6 +2,7 @@ package gee
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"path"
@@ -34,9 +35,11 @@ func (engine *Engine) GET(path string, handler HandlerFunc) {
 */
 
 type Engine struct {
-	*RouterGroup // embeded type
-	router       *router
-	groups       []*RouterGroup
+	*RouterGroup  // embeded type
+	router        *router
+	groups        []*RouterGroup //save all groups
+	htmlTemplates *template.Template
+	funcMap       template.FuncMap
 }
 
 func NewEngine() *Engine {
@@ -59,6 +62,26 @@ func (group *RouterGroup) NewGroup(prefix string) *RouterGroup {
 func (group *RouterGroup) AddMiddleware(middleware ...HandlerFunc) {
 	group.middlewares = append(group.middlewares, middleware...)
 }
+
+/*
+- type Dir string
+A Dir implements FileSystem using the native file system restricted to a specific directory tree.
+
+- type FileSystem interface {
+	Open(name string) (File, error)
+}
+A FileSystem implements access to a collection of named files
+
+- func FileServer(root FileSystem) Handler
+FileServer returns a handler that serves HTTP requests
+with the contents of the file system rooted at root.
+
+- func StripPrefix(prefix string, h Handler) Handler
+
+StripPrefix returns a handler that serves HTTP requests
+by removing the given prefix from the request URL's Path (and RawPath if set)
+and invoking the handler h
+*/
 
 func (group *RouterGroup) createStaticHandler(relativePath string, fs http.FileSystem) HandlerFunc {
 	absolutePath := path.Join(group.prefix, relativePath)
@@ -105,10 +128,19 @@ func (e *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	c := newContext(req, w)
 	c.handlers = middlewares
+	c.engine = e
 	e.router.handle(c)
 }
 
 func (e *Engine) Run(addr string) (err error) {
 	fmt.Println("Http service started...")
 	return http.ListenAndServe(addr, e)
+}
+
+func (e *Engine) SetFuncMap(funcMap template.FuncMap) {
+	e.funcMap = funcMap
+}
+
+func (e *Engine) LoadHTMLGlob(pattern string) {
+	e.htmlTemplates = template.Must(template.New("").Funcs(e.funcMap).ParseGlob(pattern))
 }

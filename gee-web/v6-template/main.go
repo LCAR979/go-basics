@@ -1,15 +1,34 @@
 package main
 
 import (
+	"fmt"
+	"html/template"
 	"net/http"
+	"time"
 
 	"gee"
 )
+
+type student struct {
+	Name string
+	Age  int8
+}
+
+func FormatDate(t time.Time) string {
+	year, month, day := t.Date()
+	return fmt.Sprintf("%d-%02d-%02d", year, month, day)
+}
 
 // developer usage
 func main() {
 	r := gee.NewEngine()
 	r.AddMiddleware(gee.Logger())
+	r.SetFuncMap(template.FuncMap{
+		"FormatAsDate": FormatDate,
+	})
+	r.LoadHTMLGlob("templates/*")
+	r.Static("/assets", "./static")
+
 	r.GET("/", func(c *gee.Context) {
 		c.HTML(http.StatusOK, "<h1>Hello Gee</h1>")
 	})
