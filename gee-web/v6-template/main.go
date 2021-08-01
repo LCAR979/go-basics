@@ -61,5 +61,20 @@ func main() {
 		})
 	}
 
+	stu1 := &student{Name: "Geektutu", Age: 20}
+	stu2 := &student{Name: "Jack", Age: 22}
+	r.GET("/students", func(c *gee.Context) {
+		c.HTMLUsingTemplate(http.StatusOK, "arr.tmpl", gee.JSONObj{
+			"title":  "gee",
+			"stuArr": [2]*student{stu1, stu2},
+		})
+	})
+
+	r.GET("/date", func(c *gee.Context) {
+		c.HTMLUsingTemplate(http.StatusOK, "custom_func.tmpl", gee.JSONObj{
+			"title": "gee",
+			"now":   time.Date(2019, 8, 17, 0, 0, 0, 0, time.UTC),
+		})
+	})
 	r.Run(":9999")
 }
