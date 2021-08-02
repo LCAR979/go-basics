@@ -30,7 +30,7 @@ func main() {
 	r.Static("/assets", "./static")
 
 	r.GET("/", func(c *gee.Context) {
-		c.HTML(http.StatusOK, "<h1>Hello Gee</h1>")
+		c.HTMLUsingTemplate(http.StatusOK, "css.tmpl", nil)
 	})
 	v1 := r.NewGroup("/v1")
 	{
@@ -61,19 +61,19 @@ func main() {
 		})
 	}
 
-	stu1 := &student{Name: "Geektutu", Age: 20}
-	stu2 := &student{Name: "Jack", Age: 22}
+	stu1 := &student{Name: "Harry", Age: 20}
+	stu2 := &student{Name: "John", Age: 22}
 	r.GET("/students", func(c *gee.Context) {
 		c.HTMLUsingTemplate(http.StatusOK, "arr.tmpl", gee.JSONObj{
-			"title":  "gee",
+			"title":  "arr_template",
 			"stuArr": [2]*student{stu1, stu2},
 		})
 	})
 
 	r.GET("/date", func(c *gee.Context) {
 		c.HTMLUsingTemplate(http.StatusOK, "custom_func.tmpl", gee.JSONObj{
-			"title": "gee",
-			"now":   time.Date(2019, 8, 17, 0, 0, 0, 0, time.UTC),
+			"title": "custom_func_temlate",
+			"now":   time.Date(2021, 8, 17, 0, 0, 0, 0, time.UTC),
 		})
 	})
 	r.Run(":9999")
