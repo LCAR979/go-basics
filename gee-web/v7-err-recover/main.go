@@ -76,5 +76,10 @@ func main() {
 			"now":   time.Date(2021, 8, 17, 0, 0, 0, 0, time.UTC),
 		})
 	})
+
+	r.GET("/panic", func(c *gee.Context) {
+		smallArr := []int{1, 2, 3}
+		c.String(http.StatusOK, string(smallArr[10]))
+	})
 	r.Run(":9999")
 }
